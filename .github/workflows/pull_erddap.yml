@@ -9,6 +9,9 @@ on:
 # Optionally, trigger manually from the GitHub Actions UI
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
 
   build:
