@@ -86,12 +86,6 @@ jobs:
           rmarkdown::render(here::here("README.Rmd"))
         shell: Rscript {0}
 
-      #- name: Find differences
-      # Create text explaining differences and append to news.md and release notes
-
-      #- name: Find differences
-      # Create text explaining differences and append to news.md and release notes
-
       # Send email indicating if anything has changed
       - name: Send email
         uses: dawidd6/action-send-mail@v3
