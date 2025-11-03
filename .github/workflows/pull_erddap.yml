@@ -1,4 +1,4 @@
-name: erddap data pull
+name: erddap test data pull
 
 on:
   schedule:
@@ -69,21 +69,21 @@ jobs:
         run: |
           options(timeout = 60 * 60 * 6)
           source(here::here("data-raw/compare_data.r"))
-          # source(here::here("data-raw/update_description.R"))
-          # source(here::here("data-raw/update_news.R"))
+          source(here::here("data-raw/update_description.R"))
+          source(here::here("data-raw/update_news.R"))
           diffs <- compare_data()
-          #version <- update_description(diffs,digit=3)
-          #update_news(version,diffs)
+          version <- update_description(diffs,digit=3)
+          update_news(version,diffs)
           rmarkdown::render(here::here("data-raw/sendAsEmail.Rmd"),
                     params = diffs)
 
-          #saveRDS(version,here::here("data-raw/version.rds"))
+          saveRDS(version,here::here("data-raw/version.rds"))
         shell: Rscript {0}
 
       - name: render readme.rmd
         run: |
           options(timeout = 60 * 60 * 6)
-          #rmarkdown::render(here::here("README.Rmd"))
+          rmarkdown::render(here::here("README.Rmd"))
         shell: Rscript {0}
 
       #- name: Find differences
@@ -103,7 +103,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
 
-          subject: Github Actions job result
+          subject: TEST - Github Actions job result
           to: andrew.beet@noaa.gov
 
           from: buoyData GitHub
@@ -114,25 +114,25 @@ jobs:
 
           #attachments: ./data-raw/sendAsEmail.html
 
-      # - name: commit data files
-      #   run: |
-      #     git config user.name github-actions
-      #     git config user.email github-actions@github.com
-      #     git add data/buoyDataWorld.rda
-      #     git add data-raw/datapull.txt
-      #     git add README.Rmd
-      #     git add README.Rmd
-      #     git add NEWS.md
-      #     git add DESCRIPTION
-      #     git commit -m "automated commit from pullLazyData yml"
-      #     git push
+       - name: commit data files
+         run: |
+           git config user.name github-actions
+           git config user.email github-actions@github.com
+           git add data/buoy_data.rda
+           git add data-raw/datapull.txt
+           git add README.Rmd
+           git add README.md
+           git add NEWS.md
+           git add DESCRIPTION
+           git commit -m "automated commit from pull_erddap yml"
+           git push
 
-      # - name: create gh-release
-      #   run: |
-      #       version <- readRDS(here::here("data-raw/version.rds"))
-      #       if(!is.null(version)){
-      #       usethis::use_github_release(publish = T)
-      #       }
-      #   shell: Rscript {0}
+       - name: create gh-release
+         run: |
+             version <- readRDS(here::here("data-raw/version.rds"))
+             if(!is.null(version)){
+                usethis::use_github_release(publish = T)
+             }
+         shell: Rscript {0}
 
 

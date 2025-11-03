@@ -5,8 +5,8 @@
 compare_data <- function() {
   current <- readRDS(here::here("data-raw/current_data.rds"))
   new <- readRDS(here::here("data-raw/new_data.rds"))
-  # current <- readRDS(here::here("data-raw/erddap/10292025.rds"))
-  # new <- readRDS(here::here("data-raw/erddap/10302025.rds"))
+  # current <- readRDS(here::here("data-raw/erddap/erddap.rds"))
+  # new <- readRDS(here::here("data-raw/erddap/newerddap.rds"))
 
   # are data sets of the same dimension. May only expect rws to change
   sameDim <- all.equal(dim(current), dim(new))
@@ -44,8 +44,8 @@ compare_data <- function() {
   # rows diffs based on current columns
   # if new fields were included the whole data set would be a diff.
   # filter out col differences and compare whats left
-  new <- new |> dplyr::select(-lastMeasurement)
-  current <- current |> dplyr::select(-lastMeasurement)
+  new <- new |> dplyr::select(ID, Y1, YN, nYEARS, LAT, LON, STATION_LOC)
+  current <- current |> dplyr::select(ID, Y1, YN, nYEARS, LAT, LON, STATION_LOC)
 
   cols_current <- names(current)
   cols_new <- names(new)
