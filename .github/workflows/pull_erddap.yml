@@ -76,7 +76,6 @@ jobs:
           update_news(version,diffs)
           rmarkdown::render(here::here("data-raw/sendAsEmail.Rmd"),
                     params = diffs)
-
           saveRDS(version,here::here("data-raw/version.rds"))
         shell: Rscript {0}
 
