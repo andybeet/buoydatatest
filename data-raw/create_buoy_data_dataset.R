@@ -107,8 +107,8 @@ create_buoy_data_dataset <- function(exportFile = F, isRunLocal = T) {
   # This will take about 2 hrs (~ 1300 buoys)
   stationi_meta <- list()
   station_meta <- NULL
-  #for (i in 1:length(erddap_stations$station)) {
-  for (i in 1:10) {
+  for (i in 1:length(erddap_stations$station)) {
+    #for (i in 1:10) {
     station_id <- erddap_stations$station[i]
     message(paste0("Processing station: ", i, " - ", station_id))
     attempt <- 1
