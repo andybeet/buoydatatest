@@ -141,12 +141,12 @@ data from a single buoy.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 17</span></span></span>
 <span><span class="co">#&gt;   ID       Y1    YN nYEARS lastMeasurement       LAT   LON STATION_LOC     TTYPE</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 44013  <span style="text-decoration: underline;">1</span>984  <span style="text-decoration: underline;">2</span>025     42 2025-11-04 <span style="color: #949494;">10:00:00</span>  42.3 -<span style="color: #BB0000;">70.7</span> BOSTON 16 NM E… 2.1-…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 44013  <span style="text-decoration: underline;">1</span>984  <span style="text-decoration: underline;">2</span>025     42 2025-11-11 <span style="color: #949494;">10:00:00</span>  42.3 -<span style="color: #BB0000;">70.7</span> BOSTON 16 NM E… 2.1-…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 44018  <span style="text-decoration: underline;">2</span>002  <span style="text-decoration: underline;">2</span>024     21 2024-08-30 <span style="color: #949494;">18:10:00</span>  41.3 -<span style="color: #BB0000;">69.3</span> CAPE COD - 9 N… 3-me…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 44029  <span style="text-decoration: underline;">2</span>004  <span style="text-decoration: underline;">2</span>025     20 2025-11-04 <span style="color: #949494;">06:00:00</span>  42.5 -<span style="color: #BB0000;">70.6</span> Buoy A01 - Mas… Moor…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> BZBM3  <span style="text-decoration: underline;">2</span>004  <span style="text-decoration: underline;">2</span>025     22 2025-11-04 <span style="color: #949494;">10:00:00</span>  41.5 -<span style="color: #BB0000;">70.7</span> 8447930 - Wood… Wate…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 44029  <span style="text-decoration: underline;">2</span>004  <span style="text-decoration: underline;">2</span>025     20 2025-11-11 <span style="color: #949494;">09:00:00</span>  42.5 -<span style="color: #BB0000;">70.6</span> Buoy A01 - Mas… Moor…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> BZBM3  <span style="text-decoration: underline;">2</span>004  <span style="text-decoration: underline;">2</span>025     22 2025-11-11 <span style="color: #949494;">10:18:00</span>  41.5 -<span style="color: #BB0000;">70.7</span> 8447930 - Wood… Wate…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> IOSN3  <span style="text-decoration: underline;">1</span>984  <span style="text-decoration: underline;">2</span>025     42 2025-09-14 <span style="color: #949494;">03:00:00</span>  43.0 -<span style="color: #BB0000;">70.6</span> Isle of Shoals… C-MA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> NTKM3  <span style="text-decoration: underline;">2</span>005  <span style="text-decoration: underline;">2</span>025     21 2025-11-04 <span style="color: #949494;">10:48:00</span>  41.3 -<span style="color: #BB0000;">70.1</span> 8449130 - Nant… Wate…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> NTKM3  <span style="text-decoration: underline;">2</span>005  <span style="text-decoration: underline;">2</span>025     21 2025-11-11 <span style="color: #949494;">10:48:00</span>  41.3 -<span style="color: #BB0000;">70.1</span> 8449130 - Nant… Wate…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 8 more variables: TIMEZONE &lt;chr&gt;, OWNER &lt;chr&gt;, OWNERNAME &lt;chr&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   COUNTRY &lt;chr&gt;, HULL &lt;chr&gt;, PAYLOAD &lt;chr&gt;, FORECAST &lt;chr&gt;, NOTE &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Lets pull the sea surface temperature (variable name, wtmp) from buoy
@@ -160,7 +160,7 @@ data from a single buoy.</p>
 <span>   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Sea Surface Temp (Celcius)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="buoydata_files/figure-html/plotData-1.png" alt="SST time series for buoy 44018" width="700"></p>
+<p><img src="buoydata_files/figure-html/plotData-1.png" class="r-plt" alt="SST time series for buoy 44018" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -173,7 +173,7 @@ data from a single buoy.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
