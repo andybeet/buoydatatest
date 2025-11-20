@@ -118,7 +118,7 @@ create_buoy_data_dataset <- function(exportFile = F, isRunLocal = T) {
       tryCatch(
         {
           d <- rerddap::tabledap(
-            datasetid,
+            info,
             fields = c("time"),
             query = paste0('station="', station_id, '"'),
             distinct = TRUE
