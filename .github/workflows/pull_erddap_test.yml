@@ -19,6 +19,8 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GH_RELEASE }}
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: false
+      # Pass environment variables to the script
+      ALLOWED_IP_RANGES: "145.0.0.0/8" # <-- Define your ranges here
 
     steps:
       - name: Get Runner IP Address
@@ -29,7 +31,6 @@ jobs:
 
       - name: 🔒 Validate Public IP and Exit if Unsafe (Bash with ipcalc)
         id: ip_check_and_abort_bash
-        shell: bash
         # Ensure ipcalc is installed on the runner (often pre-installed or easy to add)
         run: |
           # Check for ipcalc and install if necessary (for robustness on standard runners)
@@ -75,10 +76,7 @@ jobs:
           else
             echo "✅ All checks passed. Proceeding."
           fi
-        # Pass environment variables to the script
-        env:
-          ALLOWED_IP_RANGES: "145.0.0.0/8" # <-- Define your ranges here
-
+        shell: bash
 
       - name: Checkout repo
         uses: actions/checkout@v4
