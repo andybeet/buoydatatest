@@ -9,7 +9,7 @@ jobs:
   restart_if_needed:
     runs-on: ubuntu-latest
     env:
-      GITHUB_PAT: ${{ secrets.GH_RELEASE }}
+      githib-token: ${{ secrets.GH_RELEASE }}
     if: >
       # Check if the overall outcome of the main workflow was 'failure' or 'cancelled' (aborted)
       ${{ github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'cancelled' }}
