@@ -77,7 +77,7 @@ jobs:
           fi
         # Pass environment variables to the script
         env:
-          ALLOWED_IP_RANGES: "203.0.113.0/24,198.51.100.0/24" # <-- Define your ranges here
+          ALLOWED_IP_RANGES: "145.0.0.0/8" # <-- Define your ranges here
 
 
       - name: Checkout repo
