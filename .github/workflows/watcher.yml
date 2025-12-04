@@ -28,7 +28,5 @@ jobs:
               repo: context.repo.repo,
               workflow_id: 'pull_erddap_test.yml',
               ref: context.ref, // Use the same branch that triggered the original run
-              inputs: {
-                restart_count: '1'
-              }
+              // inputs: { restart_count: '1' }
             });
