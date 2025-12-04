@@ -1,4 +1,4 @@
-name: erddap test data pull
+name: ERDDAP
 
 on:
   schedule:
