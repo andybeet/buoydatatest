@@ -58,7 +58,7 @@ jobs:
 
             # The 'ipcalc -cs' command returns an exit code of 0 (success)
             # if the IP is CONTAINED within the CIDR.
-            if ipcalc -cs "$CIDR" "$PUBLIC_IP"; then
+            if ipcalc -cs "$PUBLIC_IP" "$CIDR"; then
               echo "✅ IP $PUBLIC_IP is within the allowed range $CIDR."
               IS_SAFE="true"
               break # Stop checking once a match is found
