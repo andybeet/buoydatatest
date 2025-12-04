@@ -27,11 +27,9 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              // # This must match the filename of the main workflow, without .yml extension
               workflow_id: 'pull_erddap_test.yml',
               ref: context.ref, // Use the same branch that triggered the original run
               inputs: {
-                //# Optional: Pass any required inputs
                 restart_count: '1'
               }
             });
