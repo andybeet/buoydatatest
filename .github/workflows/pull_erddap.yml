@@ -1,4 +1,4 @@
-name: ERDDAP
+name: ERDDAP \texttrademark
 
 on:
   schedule:
