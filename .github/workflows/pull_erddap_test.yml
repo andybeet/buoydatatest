@@ -29,20 +29,62 @@ jobs:
           echo "The runner's external IPv4 address is: $RUNNER_IP"
           echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
 
-      - name: 🔒 Validate Public IP and Exit if Unsafe (Bash with ipcalc)
-        id: ip_check_and_abort_bash
-        # Ensure ipcalc is installed on the runner (often pre-installed or easy to add)
-        run: |
-          # Check for ipcalc and install if necessary (for robustness on standard runners)
-          if ! command -v ipcalc &> /dev/null
-          then
-              echo "ipcalc not found. Attempting to install..."
-              # This works on Ubuntu/Debian-based runners
-              sudo apt-get update && sudo apt-get install -y ipcalc
-          fi
+      # - name: 🔒 Validate Public IP and Exit if Unsafe (Bash with ipcalc)
+      #   id: ip_check_and_abort_bash
+      #   # Ensure ipcalc is installed on the runner (often pre-installed or easy to add)
+      #   run: |
+      #     # Check for ipcalc and install if necessary (for robustness on standard runners)
+      #     if ! command -v ipcalc &> /dev/null
+      #     then
+      #         echo "ipcalc not found. Attempting to install..."
+      #         # This works on Ubuntu/Debian-based runners
+      #         sudo apt-get update && sudo apt-get install -y ipcalc
+      #     fi
+      #
+      #     PUBLIC_IP=$(curl -s https://api.ipify.org)
+      #     ALLOWED_RANGES="${{ env.ALLOWED_IP_RANGES }}"
+      #
+      #     echo "Current Public IP: $PUBLIC_IP"
+      #     echo "Checking against allowed ranges: $ALLOWED_RANGES"
+      #
+      #     # Assume unsafe until proven safe
+      #     IS_SAFE="false"
+      #
+      #     # Iterate through the comma-separated CIDR ranges
+      #     IFS=',' read -ra CIDR_ARRAY <<< "$ALLOWED_RANGES"
+      #
+      #     for CIDR in "${CIDR_ARRAY[@]}"; do
+      #       CIDR=$(echo "$CIDR" | tr -d '[:space:]') # Trim whitespace
+      #
+      #       # The 'ipcalc -cs' command returns an exit code of 0 (success)
+      #       # if the IP is CONTAINED within the CIDR.
+      #       if ipcalc -cs "$CIDR" "$PUBLIC_IP"; then
+      #         echo "✅ IP $PUBLIC_IP is within the allowed range $CIDR."
+      #         IS_SAFE="true"
+      #         break # Stop checking once a match is found
+      #       else
+      #         echo "❌ IP $PUBLIC_IP is NOT within $CIDR."
+      #       fi
+      #     done
+      #
+      #     # Check the final status and exit if unsafe
+      #     if [ "$IS_SAFE" = "false" ]; then
+      #       # Use the GitHub Actions annotation command
+      #       echo "::error title=IP Security Check Failed::The runner's IP is outside all allowed ranges. Aborting job."
+      #       # A non-zero exit code (1) stops the job!
+      #       exit 1
+      #     else
+      #       echo "✅ All checks passed. Proceeding."
+      #     fi
+      #   shell: bash
 
+
+      - name: 🔒 Validate Public IP and Exit if Unsafe (Bash with ipcalc)
+        # ... Ensure ipcalc install logic remains ...
+        run: |
+          # --- Variable Access Fix ---
           PUBLIC_IP=$(curl -s https://api.ipify.org)
-          ALLOWED_RANGES="${{ env.ALLOWED_IP_RANGES }}"
+          ALLOWED_RANGES="$ALLOWED_IP_RANGES" # Correct: Use native shell variable
 
           echo "Current Public IP: $PUBLIC_IP"
           echo "Checking against allowed ranges: $ALLOWED_RANGES"
@@ -56,27 +98,27 @@ jobs:
           for CIDR in "${CIDR_ARRAY[@]}"; do
             CIDR=$(echo "$CIDR" | tr -d '[:space:]') # Trim whitespace
 
-            # The 'ipcalc -cs' command returns an exit code of 0 (success)
-            # if the IP is CONTAINED within the CIDR.
-            if ipcalc -cs "$PUBLIC_IP" "$CIDR"; then
+            # --- ipcalc Fix ---
+            # Use '-c' flag for check. It returns 0 if contained, 1 if not.
+            # We explicitly discard stdout/stderr to avoid misleading output
+            if ipcalc -c "$CIDR" "$PUBLIC_IP" 2>/dev/null; then
               echo "✅ IP $PUBLIC_IP is within the allowed range $CIDR."
               IS_SAFE="true"
-              break # Stop checking once a match is found
+              break
             else
+              # This block will now correctly execute if the containment check fails
               echo "❌ IP $PUBLIC_IP is NOT within $CIDR."
             fi
           done
 
           # Check the final status and exit if unsafe
           if [ "$IS_SAFE" = "false" ]; then
-            # Use the GitHub Actions annotation command
             echo "::error title=IP Security Check Failed::The runner's IP is outside all allowed ranges. Aborting job."
-            # A non-zero exit code (1) stops the job!
             exit 1
           else
             echo "✅ All checks passed. Proceeding."
           fi
-        shell: bash
+
 
       - name: Checkout repo
         uses: actions/checkout@v4
