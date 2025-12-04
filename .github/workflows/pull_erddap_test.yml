@@ -1,0 +1,126 @@
+name: erddap test
+
+on:
+  schedule:
+    # uses UTC/GMT time (+ 5 hrs)
+    ####- cron: "0 17 * * 3" # Every Wednesday at 1200 hrs = 1700 UTC
+    #- cron: "0 12 1 * *" # Noon UTC on 1st day of month
+    - cron: '0 10 * * 0' # 10am UTC on every Sunday (5 am EST)
+# Optionally, trigger manually from the GitHub Actions UI
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GH_RELEASE }}
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: false
+
+    steps:
+      - name: Get Runner IP Address
+        run: |
+          RUNNER_IP=$(curl -s https://api.ipify.org)
+          echo "The runner's external IPv4 address is: $RUNNER_IP"
+          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
+
+      - name: 🔒 Validate Public IP and Exit if Unsafe (Bash with ipcalc)
+        id: ip_check_and_abort_bash
+        shell: bash
+        # Ensure ipcalc is installed on the runner (often pre-installed or easy to add)
+        run: |
+          # Check for ipcalc and install if necessary (for robustness on standard runners)
+          if ! command -v ipcalc &> /dev/null
+          then
+              echo "ipcalc not found. Attempting to install..."
+              # This works on Ubuntu/Debian-based runners
+              sudo apt-get update && sudo apt-get install -y ipcalc
+          fi
+
+          PUBLIC_IP=$(curl -s https://api.ipify.org)
+          ALLOWED_RANGES="${{ env.ALLOWED_IP_RANGES }}"
+
+          echo "Current Public IP: $PUBLIC_IP"
+          echo "Checking against allowed ranges: $ALLOWED_RANGES"
+
+          # Assume unsafe until proven safe
+          IS_SAFE="false"
+
+          # Iterate through the comma-separated CIDR ranges
+          IFS=',' read -ra CIDR_ARRAY <<< "$ALLOWED_RANGES"
+
+          for CIDR in "${CIDR_ARRAY[@]}"; do
+            CIDR=$(echo "$CIDR" | tr -d '[:space:]') # Trim whitespace
+
+            # The 'ipcalc -cs' command returns an exit code of 0 (success)
+            # if the IP is CONTAINED within the CIDR.
+            if ipcalc -cs "$CIDR" "$PUBLIC_IP"; then
+              echo "✅ IP $PUBLIC_IP is within the allowed range $CIDR."
+              IS_SAFE="true"
+              break # Stop checking once a match is found
+            else
+              echo "❌ IP $PUBLIC_IP is NOT within $CIDR."
+            fi
+          done
+
+          # Check the final status and exit if unsafe
+          if [ "$IS_SAFE" = "false" ]; then
+            # Use the GitHub Actions annotation command
+            echo "::error title=IP Security Check Failed::The runner's IP is outside all allowed ranges. Aborting job."
+            # A non-zero exit code (1) stops the job!
+            exit 1
+          else
+            echo "✅ All checks passed. Proceeding."
+          fi
+        # Pass environment variables to the script
+        env:
+          ALLOWED_IP_RANGES: "203.0.113.0/24,198.51.100.0/24" # <-- Define your ranges here
+
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: set up pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install command line packages
+        run: |
+          sudo apt update
+          sudo apt-get install libcurl4-openssl-dev libgit2-dev
+#          sudo apt-get install  libgdal-dev libcurl4-gnutls-dev libgit2-dev libudunits2-dev libharfbuzz-dev libfribidi-dev
+        shell: bash
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.2.0'
+
+      - name: Install packages
+        run: |
+          install.packages("pak")
+          pak::pak(c("here","stringr","usethis","rmarkdown","gt","knitr"))
+          pak::pak("NOAA-EDAB/buoydata")
+        shell: Rscript {0}
+
+      - name: Save current rdas
+        run: |
+          load(here::here("data/buoy_data.rda"))
+          saveRDS(buoy_data,here::here("data-raw/current_data.rds"))
+          rm(buoy_data)
+        shell: Rscript {0}
+
+      - name: Pull nbdc data via ERDDAP
+        run: |
+          options(timeout = 60 * 60 * 6)
+          source(here::here("data-raw/create_buoy_data_dataset.R"))
+          newData <- create_buoy_data_dataset(exportFile=T,isRunLocal = F)
+          saveRDS(newData,here::here("data-raw/new_data.rds"))
+        shell: Rscript {0}
+
+
+

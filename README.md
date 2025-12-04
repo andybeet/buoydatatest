@@ -8,6 +8,7 @@
 [![gh-pages](https://github.com/NOAA-EDAB/buoydata/actions/workflows/pkgdown.yml/badge.svg)](https://github.com/NOAA-EDAB/buoydata/actions/workflows/pkgdown.yml)
 [![gitleaks](https://github.com/NOAA-EDAB/buoydata/actions/workflows/secretScan.yml/badge.svg)](https://github.com/NOAA-EDAB/buoydata/actions/workflows/secretScan.yml)
 [![R-CMD-check](https://github.com/NOAA-EDAB/buoydata/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NOAA-EDAB/buoydata/actions/workflows/R-CMD-check.yaml)
+[![ERDDAP](https://github.com/andybeet/buoydatatest/actions/workflows/pull_erddap.yml/badge.svg)™](https://github.com/andybeet/buoydatatest/actions/workflows/pull_erddap.yml)
 <!-- badges: end -->
 
 The goal of `buoydata` is to easily download and process buoy data
@@ -25,7 +26,7 @@ lazily loaded station description data provided with the package
 combines many more attributes (than
 [rnoaa](https://github.com/ropensci/rnoaa)) by which to filter.
 
-*Date of most recent data pull: 2025-11-30*
+*Date of most recent data pull: 2025-12-04*
 
 ## Installation
 
@@ -63,8 +64,8 @@ website
 
 ## Contact
 
-| [andybeet](https://github.com/andybeet)                                                                        |
-|----------------------------------------------------------------------------------------------------------------|
+| [andybeet](https://github.com/andybeet) |
+|----|
 | [![andybeet avatar](https://avatars1.githubusercontent.com/u/22455149?s=100&v=4)](https://github.com/andybeet) |
 
 #### Legal disclaimer
