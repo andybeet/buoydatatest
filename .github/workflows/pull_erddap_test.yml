@@ -115,7 +115,7 @@ jobs:
       - name: Pull nbdc data via ERDDAP
         run: |
           options(timeout = 60 * 60 * 6)
-          source(here::here("data-raw/create_buoy_data_dataset.R"))
+          source(here::here("data-raw/create_buoy_data_dataset_test.R"))
           newData <- create_buoy_data_dataset(exportFile=T,isRunLocal = F)
           saveRDS(newData,here::here("data-raw/new_data.rds"))
         shell: Rscript {0}
