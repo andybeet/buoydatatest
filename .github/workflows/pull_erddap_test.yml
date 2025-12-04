@@ -113,7 +113,7 @@ jobs:
 
           # Check the final status and exit if unsafe
           if [ "$IS_SAFE" = "false" ]; then
-            echo "::error title=IP Security Check Failed::The runner's IP is outside all allowed ranges. Aborting job."
+            echo "::error title=IP Security Check Failed::The runner's IP ($PUBLIC_IP) is outside all allowed ranges. Aborting job."
             exit 1
           else
             echo "✅ All checks passed. Proceeding."
