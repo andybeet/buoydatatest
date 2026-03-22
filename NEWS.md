@@ -1,3 +1,11 @@
+# buoydata 1.0.3
+
+Data pull: March 22, 2026
+
+### Stations added 
+
+* 42358 - FGBNMS Sofar Spotter: [27.874,-93.815]. NA-NA (NA yrs).
+
 # buoydata 1.0.2
 
 Data pull: February 01, 2026
